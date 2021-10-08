@@ -3,22 +3,24 @@
 name: SGSI_Build
 
 on:
+  workflow_dispatch:
   watch:
     types: [started]
     
 env:              
-  ROM_URL: 'https://dl.google.com/developers/android/sc/images/ota/redfin-ota-spp2.210219.008-3d61e529.zip'
-  ZIP_NAME: 'update.zip'
-  OS_TYPE: 'Generic'
+  ROM_URL: 'https://dl.google.com/developers/android/sc/images/factory/redfin-spb5.210812.002-factory-cc26fdda.zip'
+  ZIP_NAME: 'redfin-spb5.210812.002-factory-cc26fdda.zip'
+  OS_TYPE: 'Pixel'
   BUILD_TYPE: 'ab'
-  REPACK_NAME: 'SGSI.zip'
+  REPACK_NAME: 'SGaSI.zip'
   VERSION: '12'
-  upload_action-gh-release: 'true'
+  upload_WeTransfer: 'true'
+  upload_action-gh-release: 'false'
   SETUP: 'true'
   
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
        - name: Checkout
@@ -40,13 +42,13 @@ jobs:
 
        - name: Cloning...
          run: |
-             git clone --recurse-submodules https://github.com/xiaoxindada/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
+             git clone https://github.com/xiaoxindada/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
            
        - name: Download zip...
          run: |
             cd $GITHUB_WORKSPACE/SGSI-build-tool
             mkdir ./tmp
-            wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME"
+            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME"
             echo "zip_file: $(ls "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/")"
             
        - name: Setup Tool Utils...
@@ -54,7 +56,7 @@ jobs:
          run: |
             sudo sed -i 's/USE_MIRROR_FOR_PIP\=true/USE_MIRROR_FOR_PIP\=false/' $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
             sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
-            # sudo apt-get -y --purge remove "adoptopenjdk-11-hotspot"
+            sudo apt-get -y --purge remove "adoptopenjdk-11-hotspot"
             java -version
             
        - name: Building AB DEVICES SGSI...
@@ -71,22 +73,25 @@ jobs:
          run: |            
              cd $GITHUB_WORKSPACE/SGSI-build-tool
              pwd
-             mkdir -p upload
              zip -r $REPACK_NAME ./SGSI/*
-             if [[ $(du -sb "$REPACK_NAME" | awk '{print $1}') -gt 2097152000 ]];then
-                 echo -e "split packaging..."
-                 tar -cpzf - "$REPACK_NAME" | split -d -b 1024m - "upload/$REPACK_NAME"
-             else
-                 mv $REPACK_NAME upload/$REPACK_NAME
-             fi
-             ls "upload"
+             ls "$REPACK_NAME"
+
+       - name: Upload SGSI to WeTransfer...
+         if: env.upload_WeTransfer == 'true' 
+         run: |
+           cd $GITHUB_WORKSPACE/SGSI-build-tool
+           pwd
+           ls "$REPACK_NAME"
+           curl -sL https://git.io/file-transfer | sh
+           ./transfer wet ./$REPACK_NAME
 
        - name: Upload SGSI to action-gh-release...
          if: env.upload_action-gh-release == 'true'
-         uses: ncipollo/release-action@v1.8.6
+         uses: softprops/action-gh-release@v1
          with:
-           artifacts: ${{ github.workspace }}/SGSI-build-tool/upload/*
+           files: ${{ github.workspace }}/SGSI-build-tool/${{ env.REPACK_NAME }}
            name: xiaoxinSGSI-${{ env.OS_TYPE }}-${{ env.BUILD_TYPE }}-Android${{ env.VERSION }}-unpack
-           tag: xiaoxinSGSI-${{ env.OS_TYPE }}-${{ env.BUILD_TYPE }}-Android${{ env.VERSION }}-${{ github.run_number }}
-           bodyFile: "${{ github.workspace }}/SGSI-build-tool/SGSI/build_info.txt"
-           token: ${{ secrets.GITHUB_TOKEN }}
+           tag_name: 12
+           #body: Use actions auto bulid
+         env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
