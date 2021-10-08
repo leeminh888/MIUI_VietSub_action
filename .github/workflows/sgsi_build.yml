@@ -8,8 +8,8 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://dl.google.com/developers/android/sc/images/factory/redfin-spb5.210812.002-factory-cc26fdda.zip'
-  ZIP_NAME: 'redfin-spb5.210812.002-factory-cc26fdda.zip'
+  ROM_URL: 'https://dl.google.com/developers/android/sc/images/ota/redfin-ota-spb5.210812.002-0f1e0a1f.zip'
+  ZIP_NAME: 'redfin-ota-spb5.210812.002-0f1e0a1f.zip'
   OS_TYPE: 'Pixel'
   BUILD_TYPE: 'ab'
   REPACK_NAME: 'SGaSI.zip'
