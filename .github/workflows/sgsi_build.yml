@@ -12,7 +12,7 @@ env:
   ZIP_NAME: 'aosp_raphael-ota-eng.abhishek-gapps.zip'
   OS_TYPE: 'Generic'
   BUILD_TYPE: 'ab'
-  REPACK_NAME: 'aosp_port'
+  REPACK_NAME: 'aosp_port.zip'
   VERSION: '12'
   upload_WeTransfer: 'true'
   upload_action-gh-release: 'false'
