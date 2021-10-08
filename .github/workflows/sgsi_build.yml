@@ -8,11 +8,11 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://dl.google.com/developers/android/sc/images/ota/redfin-ota-spb5.210812.002-0f1e0a1f.zip'
-  ZIP_NAME: 'redfin-ota-spb5.210812.002-0f1e0a1f.zip'
-  OS_TYPE: 'Pixel'
+  ROM_URL: 'https://mirror.akhilnarang.dev/AOSP/raphael/S/aosp_raphael-ota-eng.abhishek-gapps.zip'
+  ZIP_NAME: 'aosp_raphael-ota-eng.abhishek-gapps.zip'
+  OS_TYPE: 'Generic'
   BUILD_TYPE: 'ab'
-  REPACK_NAME: 'SGaSI.zip'
+  REPACK_NAME: 'aosp_port'
   VERSION: '12'
   upload_WeTransfer: 'true'
   upload_action-gh-release: 'false'
