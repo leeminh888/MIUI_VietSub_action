@@ -8,12 +8,12 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://mirror.akhilnarang.dev/AOSP/raphael/S/aosp_raphael-ota-eng.abhishek-gapps.zip'
-  ZIP_NAME: 'aosp_raphael-ota-eng.abhishek-gapps.zip'
+  ROM_URL: 'https://nitesh696969.kushwaniteah.workers.dev/0://FlymeOS%209.2-PocoX2.zip'
+  ZIP_NAME: 'flyme.zip'
   OS_TYPE: 'Generic'
   BUILD_TYPE: 'ab'
-  REPACK_NAME: 'aosp_port.zip'
-  VERSION: '12'
+  REPACK_NAME: 'flyme.zip'
+  VERSION: '11'
   upload_WeTransfer: 'true'
   upload_action-gh-release: 'false'
   SETUP: 'true'
@@ -42,7 +42,7 @@ jobs:
 
        - name: Cloning...
          run: |
-             git clone https://github.com/xiaoxindada/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
+             git clone https://github.com/buihien224/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
            
        - name: Download zip...
          run: |
