@@ -8,12 +8,12 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://nitesh696969.kushwaniteah.workers.dev/0://FlymeOS%209.2-PocoX2.zip'
-  ZIP_NAME: 'flyme.zip'
+  ROM_URL: 'https://dl.google.com/developers/android/sc/images/factory/blueline-spb5.210812.002-factory-6390aefc.zip'
+  ZIP_NAME: 'pixel.zip'
   OS_TYPE: 'Generic'
   BUILD_TYPE: 'ab'
-  REPACK_NAME: 'flyme.zip'
-  VERSION: '11'
+  REPACK_NAME: 'pixel.zip'
+  VERSION: '12'
   upload_WeTransfer: 'true'
   upload_action-gh-release: 'false'
   SETUP: 'true'
