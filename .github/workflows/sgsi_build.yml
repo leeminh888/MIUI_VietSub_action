@@ -42,9 +42,8 @@ jobs:
        - name: Download zip...
          run: |
             cd $GITHUB_WORKSPACE/hais-github-action
-            mkdir ./tmp
-            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/hais-github-action/tmp/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/hais-github-action/tmp/$ZIP_NAME"
-            echo "zip_file: $(ls "$GITHUB_WORKSPACE/hais-github-action/tmp/")"
+            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/hais-github-action/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/hais-github-action/$ZIP_NAME"
+            echo "zip_file: $(ls "$GITHUB_WORKSPACE/hais-github-action/")"
             
        - name: Setup Tool Utils...
          run: |
@@ -56,14 +55,14 @@ jobs:
          run: |
             cd $GITHUB_WORKSPACE/hais-github-action
             ls            
-            sudo bash $GITHUB_WORKSPACE/hais-github-action/HaisAuto.sh tmp/$ZIP_NAME
+            sudo bash $GITHUB_WORKSPACE/hais-github-action/HaisAuto.sh $ZIP_NAME
             ls -l
 
-       - name: Upload SGSI to WeTransfer...
+       - name: Upload Hais Build to WeTransfer...
          if: env.upload_WeTransfer == 'true' 
          run: |
-           cd $GITHUB_WORKSPACE/SGSI-build-tool
-           pwd
-           ls "$REPACK_NAME"
+           cd $GITHUB_WORKSPACE/hais-github-action
+           cd output
+           ls 
            curl -sL https://git.io/file-transfer | sh
            ./transfer wet ./$REPACK_NAME         
