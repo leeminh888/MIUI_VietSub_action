@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: hais_build
+name: SGSI_Build
 
 on:
   workflow_dispatch:
@@ -8,9 +8,14 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://hugeota.d.miui.com/21.10.13/miui_PICASSO_21.10.13_6c3b6adae1_11.0.zip'
-  ZIP_NAME: 'miui.zip'
+  ROM_URL: 'https://xiaomivn.lvt-iam-tayky.workers.dev/0:/PixelExperience_picasso-12.0-20211019-1021-ALPHA.zip'
+  ZIP_NAME: 'pixelexp.zip'
+  OS_TYPE: 'Generic'
+  BUILD_TYPE: 'ab'
+  REPACK_NAME: 'pixelexpK35.zip'
+  VERSION: '12'
   upload_WeTransfer: 'true'
+  upload_action-gh-release: 'false'
   SETUP: 'true'
   
 jobs:
@@ -37,33 +42,56 @@ jobs:
 
        - name: Cloning...
          run: |
-             git clone https://github.com/buihien224/hais-github-action.git $GITHUB_WORKSPACE/hais-github-action
+             git clone https://github.com/buihien224/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
            
        - name: Download zip...
          run: |
-            cd $GITHUB_WORKSPACE/hais-github-action
-            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/hais-github-action/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/hais-github-action/$ZIP_NAME"
-            echo "zip_file: $(ls "$GITHUB_WORKSPACE/hais-github-action/")"
+            cd $GITHUB_WORKSPACE/SGSI-build-tool
+            mkdir ./tmp
+            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME"
+            echo "zip_file: $(ls "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/")"
             
        - name: Setup Tool Utils...
+         if: env.SETUP == 'true'
          run: |
-            cd $GITHUB_WORKSPACE/hais-github-action
-            ls
-            sudo bash $GITHUB_WORKSPACE/hais-github-action/Bin/1.Install.sh 
-            ls -l
-       - name: Building Cái gì còn lâu mới nói...
+            sudo sed -i 's/USE_MIRROR_FOR_PIP\=true/USE_MIRROR_FOR_PIP\=false/' $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
+            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
+            sudo apt-get -y --purge remove "adoptopenjdk-11-hotspot"
+            java -version
+            
+       - name: Building AB DEVICES SGSI...
+         if: env.BUILD_TYPE == 'AB' || env.BUILD_TYPE == 'ab'
          run: |
-            cd $GITHUB_WORKSPACE/hais-github-action
-            ls            
-            sudo bash $GITHUB_WORKSPACE/hais-github-action/HaisAuto.sh $ZIP_NAME
-            ls -l
+            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/make.sh --AB $OS_TYPE $ZIP_NAME --fix-bug
 
-       - name: Upload Hais Build to WeTransfer...
+       - name: Building A-only DEVICES SGSI...
+         if: env.BUILD_TYPE == 'a-only'
+         run: |
+            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/make.sh --a-only $OS_TYPE $ZIP_NAME --fix-bug     
+
+       - name: Repack output file ...
+         run: |            
+             cd $GITHUB_WORKSPACE/SGSI-build-tool
+             pwd
+             zip -r $REPACK_NAME ./SGSI/*
+             ls "$REPACK_NAME"
+
+       - name: Upload SGSI to WeTransfer...
          if: env.upload_WeTransfer == 'true' 
          run: |
-           cd $GITHUB_WORKSPACE/hais-github-action
-           ls
-           cd output
-           ls 
+           cd $GITHUB_WORKSPACE/SGSI-build-tool
+           pwd
+           ls "$REPACK_NAME"
            curl -sL https://git.io/file-transfer | sh
-           ./transfer wet ./$REPACK_NAME         
+           ./transfer wet ./$REPACK_NAME
+
+       - name: Upload SGSI to action-gh-release...
+         if: env.upload_action-gh-release == 'true'
+         uses: softprops/action-gh-release@v1
+         with:
+           files: ${{ github.workspace }}/SGSI-build-tool/${{ env.REPACK_NAME }}
+           name: xiaoxinSGSI-${{ env.OS_TYPE }}-${{ env.BUILD_TYPE }}-Android${{ env.VERSION }}-unpack
+           tag_name: 12
+           #body: Use actions auto bulid
+         env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
