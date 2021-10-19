@@ -62,6 +62,7 @@ jobs:
          if: env.upload_WeTransfer == 'true' 
          run: |
            cd $GITHUB_WORKSPACE/hais-github-action
+           ls
            cd output
            ls 
            curl -sL https://git.io/file-transfer | sh
