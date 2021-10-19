@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: SGSI_Build
+name: hais_build
 
 on:
   workflow_dispatch:
@@ -8,14 +8,9 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://dl.google.com/developers/android/sc/images/factory/blueline-spb5.210812.002-factory-6390aefc.zip'
-  ZIP_NAME: 'pixel.zip'
-  OS_TYPE: 'Generic'
-  BUILD_TYPE: 'ab'
-  REPACK_NAME: 'pixel.zip'
-  VERSION: '12'
+  ROM_URL: 'https://hugeota.d.miui.com/21.10.13/miui_PICASSO_21.10.13_6c3b6adae1_11.0.zip'
+  ZIP_NAME: 'miui.zip'
   upload_WeTransfer: 'true'
-  upload_action-gh-release: 'false'
   SETUP: 'true'
   
 jobs:
@@ -42,39 +37,27 @@ jobs:
 
        - name: Cloning...
          run: |
-             git clone https://github.com/buihien224/SGSI-build-tool.git -b 12 $GITHUB_WORKSPACE/SGSI-build-tool
+             git clone https://github.com/buihien224/hais-github-action.git $GITHUB_WORKSPACE/hais-github-action
            
        - name: Download zip...
          run: |
-            cd $GITHUB_WORKSPACE/SGSI-build-tool
+            cd $GITHUB_WORKSPACE/hais-github-action
             mkdir ./tmp
-            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/$ZIP_NAME"
-            echo "zip_file: $(ls "$GITHUB_WORKSPACE/SGSI-build-tool/tmp/")"
+            axel -n $(nproc) -U "Mozilla/5.0" $ROM_URL -o "$GITHUB_WORKSPACE/hais-github-action/tmp/$ZIP_NAME" || wget -U "Mozilla/5.0" $ROM_URL -O "$GITHUB_WORKSPACE/hais-github-action/tmp/$ZIP_NAME"
+            echo "zip_file: $(ls "$GITHUB_WORKSPACE/hais-github-action/tmp/")"
             
        - name: Setup Tool Utils...
-         if: env.SETUP == 'true'
          run: |
-            sudo sed -i 's/USE_MIRROR_FOR_PIP\=true/USE_MIRROR_FOR_PIP\=false/' $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
-            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/setup.sh
-            sudo apt-get -y --purge remove "adoptopenjdk-11-hotspot"
-            java -version
-            
-       - name: Building AB DEVICES SGSI...
-         if: env.BUILD_TYPE == 'AB' || env.BUILD_TYPE == 'ab'
+            cd $GITHUB_WORKSPACE/hais-github-action
+            ls
+            sudo bash $GITHUB_WORKSPACE/hais-github-action/Bin/1.Install.sh 
+            ls -l
+       - name: Building Cái gì còn lâu mới nói...
          run: |
-            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/make.sh --AB $OS_TYPE $ZIP_NAME --fix-bug
-
-       - name: Building A-only DEVICES SGSI...
-         if: env.BUILD_TYPE == 'a-only'
-         run: |
-            sudo bash $GITHUB_WORKSPACE/SGSI-build-tool/make.sh --a-only $OS_TYPE $ZIP_NAME --fix-bug     
-
-       - name: Repack output file ...
-         run: |            
-             cd $GITHUB_WORKSPACE/SGSI-build-tool
-             pwd
-             zip -r $REPACK_NAME ./SGSI/*
-             ls "$REPACK_NAME"
+            cd $GITHUB_WORKSPACE/hais-github-action
+            ls            
+            sudo bash $GITHUB_WORKSPACE/hais-github-action/HaisAuto.sh tmp/$ZIP_NAME
+            ls -l
 
        - name: Upload SGSI to WeTransfer...
          if: env.upload_WeTransfer == 'true' 
@@ -83,15 +66,4 @@ jobs:
            pwd
            ls "$REPACK_NAME"
            curl -sL https://git.io/file-transfer | sh
-           ./transfer wet ./$REPACK_NAME
-
-       - name: Upload SGSI to action-gh-release...
-         if: env.upload_action-gh-release == 'true'
-         uses: softprops/action-gh-release@v1
-         with:
-           files: ${{ github.workspace }}/SGSI-build-tool/${{ env.REPACK_NAME }}
-           name: xiaoxinSGSI-${{ env.OS_TYPE }}-${{ env.BUILD_TYPE }}-Android${{ env.VERSION }}-unpack
-           tag_name: 12
-           #body: Use actions auto bulid
-         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
+           ./transfer wet ./$REPACK_NAME         
