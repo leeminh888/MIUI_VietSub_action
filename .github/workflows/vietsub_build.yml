@@ -8,8 +8,8 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://hugeota.d.miui.com/21.11.17/miui_RAPHAEL_21.11.17_81fcbb6204_11.0.zip'
-  Zip_name: 'MIUI_VietSub_K20Pro.zip'
+  ROM_URL: 'https://hugeota.d.miui.com/V12.5.7.0.RJKCNXM/miui_LMI_V12.5.7.0.RJKCNXM_c51a5fd19f_11.0.zip'
+  Zip_name: 'MIUI_VietSub_LMI_V12.5.7.0.RJKCNXM_c51a5fd19f_11.0.zip'
   
 jobs:
   build:
