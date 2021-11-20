@@ -42,9 +42,7 @@ jobs:
             chmod +x bhlnk.sh
             sudo bash download.sh $ROM_URL 
        - name: Upload SGSI to WeTransfer...
-         if: env.upload_WeTransfer == 'true' 
          run: |
            cd $GITHUB_WORKSPACE/MIUI_VIETSUB
-           curl -sL https://git.io/file-transfer | sh
-           ./transfer wet MIUI_VIETSUB.zip
+           curl --upload-file ./MIUI_VIETSUB.zip https://transfer.sh/MIUI_VIETSUB.zip
      
