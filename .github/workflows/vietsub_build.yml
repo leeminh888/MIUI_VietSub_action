@@ -8,7 +8,8 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://hugeota.d.miui.com/V12.5.7.0.RGICNXM/miui_PICASSO_V12.5.7.0.RGICNXM_02c694af6e_11.0.zip'
+  ROM_URL: 'https://hugeota.d.miui.com/V12.5.7.0.RJNCNXM/miui_CEZANNE_V12.5.7.0.RJNCNXM_207f23b3bf_11.0.zip'
+  Zip_name: 'MIUI_VietSub_K30U.zip'
   
 jobs:
   build:
@@ -44,5 +45,7 @@ jobs:
        - name: Upload SGSI to WeTransfer...
          run: |
            cd $GITHUB_WORKSPACE/MIUI_VIETSUB
-           curl --upload-file ./MIUI_VIETSUB.zip https://transfer.sh/MIUI_VIETSUB.zip
+           mv MIUI_VIETSUB.zip $Zip_name
+           
+           curl --upload-file ./"$Zip_name" https://transfer.sh/"$Zip_name"
      
