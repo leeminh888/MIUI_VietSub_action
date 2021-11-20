@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: SGSI_Build
+name: vietsub_build
 
 on:
   workflow_dispatch:
@@ -45,8 +45,6 @@ jobs:
          if: env.upload_WeTransfer == 'true' 
          run: |
            cd $GITHUB_WORKSPACE/MIUI_VIETSUB
-           pwd
-           ls "MIUI_VIETSUB.zip"
            curl -sL https://git.io/file-transfer | sh
-           ./transfer wet ./MIUI_VIETSUB.zip
+           ./transfer wet MIUI_VIETSUB.zip
      
