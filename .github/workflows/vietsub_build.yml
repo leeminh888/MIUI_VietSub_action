@@ -33,7 +33,7 @@ jobs:
 
        - name: Cloning...
          run: |
-             git clone https://github.com/buihien224/MIUI_VIETSUB.git $GITHUB_WORKSPACE/MIUI_VIETSUB
+             git clone -b wsl https://github.com/buihien224/MIUI_VIETSUB.git $GITHUB_WORKSPACE/MIUI_VIETSUB
            
        - name: Download zip... and run
          run: |
