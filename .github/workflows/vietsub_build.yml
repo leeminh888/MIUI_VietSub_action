@@ -44,9 +44,9 @@ jobs:
             sudo bash download.sh $ROM_URL 
             mv MIUI_VIETSUB $Zip_name
        - name: Upload to Mega
-        uses: Difegue/action-megacmd@master
-        with:
-          args: put $GITHUB_WORKSPACE/MIUI_VIETSUB/$Zip_name /MIUIVietSub/
-        env:
+              uses: Difegue/action-megacmd@master
+              with:
+              args: put $GITHUB_WORKSPACE/MIUI_VIETSUB/$Zip_name /MIUIVietSub/
+       env:
           USERNAME: 'buihien224@gmail.com'
           PASSWORD: 'hienhien'
