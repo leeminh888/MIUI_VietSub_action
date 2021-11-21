@@ -8,8 +8,8 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://bigota.d.miui.com/21.11.17/miui_BEGONIA_21.11.17_c05ad0fe41_11.0.zip'
-  Zip_name: 'MIUI_VietSub_BEGONIA_21.11.17_c05ad0fe41_11.0.zip'
+  ROM_URL: 'https://hugeota.d.miui.com/21.11.3/miui_LMI_21.11.3_d6464f494e_11.0.zip'
+  Zip_name: 'MIUI_VietSub_LMI_21.11.3_d6464f494e_11.0.zip'
   
 jobs:
   build:
@@ -45,4 +45,4 @@ jobs:
        - name: Upload to bashupload.com
          run: |
             cd $GITHUB_WORKSPACE/MIUI_VIETSUB
-            curl bashupload.com -T $Zip_name
+            curl https://bashupload.com/$Zip_name --data-binary @$Zip_name
