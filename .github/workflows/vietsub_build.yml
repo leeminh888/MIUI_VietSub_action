@@ -45,4 +45,4 @@ jobs:
        - name: Upload to bashupload.com
          run: |
             cd $GITHUB_WORKSPACE/MIUI_VIETSUB
-            curl https://bashupload.com/$Zip_name --data-binary @$Zip_name
+            curl --upload-file $Zip_name https://transfer.sh/"$Zip_name"
