@@ -8,7 +8,7 @@ on:
     types: [started]
     
 env:              
-  ROM_URL: 'https://bigota.d.miui.com/21.11.19/miui_PICASSO_21.11.19_cfa54447d9_11.0.zip'
+  ROM_URL: 'https://xiaomivn.lvt-iam-tayky.workers.dev/0:/miui_PICASSO_21.11.19_cfa54447d9_11.0.zip'
   Zip_name: 'MIUI_VietSub_PICASSO_21.11.19_cfa54447d9_11.0.zip'
   
 jobs:
@@ -42,7 +42,7 @@ jobs:
             chmod +x bhlnk.sh
             sudo bash download.sh $ROM_URL 
             mv MIUI_VIETSUB.zip $Zip_name
-       - name: Upload to bashupload.com
+       - name: Upload to transfer
          run: |
             cd $GITHUB_WORKSPACE/MIUI_VIETSUB
             curl --upload-file $Zip_name https://transfer.sh/"$Zip_name"
