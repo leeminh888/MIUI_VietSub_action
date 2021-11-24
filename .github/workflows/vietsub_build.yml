@@ -33,7 +33,7 @@ jobs:
             sudo apt-get install -y git wget zip unzip img2simg simg2img brotli
        - name: Cloning...
          run: |
-             git clone https://github.com/buihien224/MIUI_VIETSUB.git $GITHUB_WORKSPACE/MIUI_VIETSUB
+             git clone -b action https://github.com/buihien224/MIUI_VIETSUB.git $GITHUB_WORKSPACE/MIUI_VIETSUB
            
        - name: Download zip... and run
          run: |
